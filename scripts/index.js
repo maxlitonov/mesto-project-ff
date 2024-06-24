@@ -13,7 +13,6 @@ function createCard(element, deleteCard) {
   cardElement.querySelector('.card__image').alt = element.name;
   cardElement.querySelector('.card__title').textContent = element.name;
   deleteButton.addEventListener('click', deleteCard);
-  cardList.append(cardElement);
   return cardElement;
 }
 
@@ -24,5 +23,5 @@ function deleteCard(evt) {
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (element) {
-  createCard(element, deleteCard);
+  cardList.append(createCard(element, deleteCard));
 });
