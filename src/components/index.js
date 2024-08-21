@@ -4,6 +4,13 @@ const cardTemplate = document.querySelector('#card-template').content;
 // @todo: DOM узлы
 const cardList = document.querySelector('.places__list');
 
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
+const closeButton = document.querySelector('.popup__close');
+
+const editPopup = document.querySelector('.popup_type_edit');
+const addPopup = document.querySelector('.popup_type_new-card');
+
 
 // @todo: Функция создания карточки
 function createCard(element, deleteCard) {
@@ -25,3 +32,32 @@ function deleteCard(evt) {
 initialCards.forEach(function (element) {
   cardList.append(createCard(element, deleteCard));
 });
+
+////////////////////// 6ПР
+function openPopup (popup) {
+  popup.classList.add('popup_is-opened');
+  closeButton.addEventListener('click', )
+}
+
+function closePopup (popup) {
+  popup.classList.remove('popup_is-opened');
+}
+
+// function closeEsc (evt, popup) {
+//   if(evt.key.toLowerCase() === 'esc') {
+//     closePopup(popup);
+//   }
+// }
+
+
+editButton.addEventListener('click', () => {
+  openPopup(editPopup);
+  
+})
+
+
+
+addButton.addEventListener('click', () => {
+  openPopup(addPopup);
+  
+})
