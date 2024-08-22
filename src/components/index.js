@@ -4,13 +4,11 @@ const cardTemplate = document.querySelector('#card-template').content;
 // @todo: DOM узлы
 const cardList = document.querySelector('.places__list');
 
+const modals = document.querySelectorAll('.popup');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const closeButton = document.querySelector('.popup__close');
-
 const editPopup = document.querySelector('.popup_type_edit');
 const addPopup = document.querySelector('.popup_type_new-card');
-
 
 // @todo: Функция создания карточки
 function createCard(element, deleteCard) {
@@ -33,31 +31,38 @@ initialCards.forEach(function (element) {
   cardList.append(createCard(element, deleteCard));
 });
 
-////////////////////// 6ПР
-function openPopup (popup) {
-  popup.classList.add('popup_is-opened');
-  closeButton.addEventListener('click', )
+////////////////////// ПР6
+
+const openModal = (modal) => {
+  modal.classList.add('popup_is-opened');
+  modal.addEventListener('keydown', handleEsc);
 }
 
-function closePopup (popup) {
-  popup.classList.remove('popup_is-opened');
+const closeModal = (modal) => {
+  modal.classList.remove('popup_is-opened');
+  modal.removeEventListener('keydown', handleEsc)
 }
 
-// function closeEsc (evt, popup) {
-//   if(evt.key.toLowerCase() === 'esc') {
-//     closePopup(popup);
-//   }
-// }
+const handleEsc = (evt) => {
+  if(evt.key === 'Escape') {
+    closeModal(evt.currentTarget);
+  }
+}
 
+modals.forEach((modal) => {
+  modal.addEventListener('click', (evt) => {
+    if(evt.target.classList.contains('popup__close')|| evt.target.classList.contains('popup')) {
+      closeModal(modal);
+    }
+  })
+})
 
 editButton.addEventListener('click', () => {
-  openPopup(editPopup);
-  
+  openModal(editPopup);
 })
-
-
 
 addButton.addEventListener('click', () => {
-  openPopup(addPopup);
-  
+  openModal(addPopup);
 })
+
+
