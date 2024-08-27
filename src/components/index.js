@@ -43,11 +43,7 @@ function closePopup (popup) {
   popup.classList.remove('popup_is-opened');
 }
 
-// function closeEsc (evt, popup) {
-//   if(evt.key.toLowerCase() === 'esc') {
-//     closePopup(popup);
-//   }
-// }
+ 
 
 
 editButton.addEventListener('click', () => {
