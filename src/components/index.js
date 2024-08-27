@@ -40,24 +40,6 @@ initialCards.forEach(function (element) {
   cardList.append(createCard(element, deleteCard));
 });
 
-<<<<<<< HEAD
-////////////////////// 6ПР
-function openPopup (popup) {
-  popup.classList.add('popup_is-opened');
-  closeButton.addEventListener('click', )
-}
-
-function closePopup (popup) {
-  popup.classList.remove('popup_is-opened');
-}
-
- 
-
-
-editButton.addEventListener('click', () => {
-  openPopup(editPopup);
-  
-=======
 // Слушаутель закрытия на все модалки
 modals.forEach((modal) => {
   modal.addEventListener('click', (evt) => {
@@ -65,7 +47,6 @@ modals.forEach((modal) => {
       closeModal(modal);
     }
   })
->>>>>>> d4dcfbde002f88d95441133ff4fa097bc59db41c
 })
 
 // Открытие формы
