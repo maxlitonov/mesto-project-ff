@@ -1,4 +1,4 @@
-import {createCard, deleteCard} from './card.js'
+import {createCard, deleteCard, likeCard, image} from './card.js'
 
 const modals = document.querySelectorAll('.popup');
 const editPopup = document.querySelector('.popup_type_edit');
@@ -11,8 +11,13 @@ const jobInput = document.querySelector('.popup__input_type_description');
 const profileTitle = document.querySelector('.profile__title')
 const profileDescription = document.querySelector('.profile__description')
 
+const cardList = document.querySelector('.places__list');
 const cardName = document.querySelector('.popup__input_type_card-name')
 const cardLink = document.querySelector('.popup__input_type_url')
+
+const popupEditForm = document.querySelector('.popup_type_edit .popup__form')
+const popupAddForm = document.querySelector('.popup_type_new-card .popup__form')
+
 
 // Открытие формы
 const openModal = (modal) => {
@@ -37,6 +42,13 @@ const handleEsc = (evt) => {
   }
 }
 
+// Функция открытия edit модалки
+const openEditModal = (evt) => {
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
+  openModal(editPopup);
+}
+
 // Функция сабмит edit формы
 const handleEditProfileFormSubmit = (evt) => {
   evt.preventDefault();
@@ -45,33 +57,29 @@ const handleEditProfileFormSubmit = (evt) => {
   closeModal(editPopup);
 }
 
-// Функция сабмит edit формы
+// Функция открытия add модалки
+const openAddModal = (evt) => {
+  openModal(addPopup);
+}
+
+// Функция сабмит add формы
 const handleAddProfileFormSubmit = (evt) => {
   evt.preventDefault();
   const newCard = {
     link: cardLink.value,
     name: cardName.value
   }
-  cardList.append(createCard(newCard, deleteCard));
+  cardList.prepend(createCard(newCard, deleteCard, likeCard, openImage));
+  popupAddForm.reset();
+  closeModal(addPopup);
 }
 
-// Функция открытия edit модалки
-const openEditModal = (evt) => {
-  nameInput.value = profileTitle.textContent;
-  jobInput.value = profileDescription.textContent;
-  openModal(editPopup);
-}
-
-// Функция открытия add модалки
-const openAddModal = (evt) => {
-  openModal(addPopup);
-}
-
-// Функция открытия image модалки
 const openImageModal = (evt) => {
+  image(evt.target)
   openModal(imagePopup);
 }
 
+
 export {openModal, closeModal, handleEsc, handleEditProfileFormSubmit, handleAddProfileFormSubmit};
-export {openEditModal, openAddModal, openImageModal}
-export {modals, editPopup, addPopup, imagePopup};
+export {openEditModal, openAddModal}
+export {modals, editPopup, addPopup, imagePopup, cardList, popupEditForm, popupAddForm, openImageModal};

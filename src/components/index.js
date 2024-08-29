@@ -1,17 +1,17 @@
 import '../style/pages/index.css';
 import {initialCards} from './cards.js';
-import {openModal, closeModal, handleEsc, handleEditProfileFormSubmit, modals, openEditModal, openAddModal, openImageModal} from './modal.js';
-import {createCard, deleteCard} from './card.js';
+import {popupEditForm, popupAddForm, popupImageForm, cardList, openModal, closeModal, handleEsc, handleEditProfileFormSubmit, handleAddProfileFormSubmit, modals, openEditModal, openAddModal} from './modal.js';
+import {createCard, deleteCard, likeCard, openImageModal} from './card.js';
 
-// @todo: DOM узлы
-const cardList = document.querySelector('.places__list');
 const placesList = document.querySelector('.places__list');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
+const button = document.querySelector('.button');
+const popup = document.querySelector('.popup');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (element) {
-  cardList.append(createCard(element, deleteCard));
+  cardList.append(createCard(element, deleteCard, likeCard, openImageModal));
 });
 
 // Слушаутель закрытия на все модалки
@@ -23,15 +23,21 @@ modals.forEach((modal) => {
   })
 })
 
+// Добавление анимации
+modals.forEach((modal) => {
+  modal.classList.add('popup_is-animated')
+})
+
 // Слушатель открытия модалки редактирования
 editButton.addEventListener('click', openEditModal)
 
 // Слушатель открытия модалки добавления карточки
 addButton.addEventListener('click', openAddModal)
 
-// Слушатель открытия модалки изображения
-placesList.addEventListener('click', openImageModal)
+// Слушатель сабмит edit формы
+popupEditForm.addEventListener('submit', handleEditProfileFormSubmit);
 
-// Слушатель сабмит формы
-.addEventListener('submit', handleEditProfileFormSubmit);
+// Слушатель сабмит add формы
+popupAddForm.addEventListener('submit', handleAddProfileFormSubmit);
+
 
