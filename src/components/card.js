@@ -1,10 +1,10 @@
-import { openModal, imagePopup, openImageModal } from "./modal";
+import { openModal, imagePopup } from "./modal";
 
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content;
-
+const imageImagePopup = document.querySelector('.popup__image')  
 // @todo: Функция создания карточки
-const createCard = (element, deleteCard, likeCard, openImageModal) => {
+const createCard = (element, deleteCard, likeCard) => {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const deleteButton = cardElement.querySelector('.card__delete-button');
   cardElement.querySelector('.card__image').src = element.link;
@@ -12,7 +12,7 @@ const createCard = (element, deleteCard, likeCard, openImageModal) => {
   cardElement.querySelector('.card__title').textContent = element.name;
   deleteButton.addEventListener('click', deleteCard);
   cardElement.addEventListener('click', likeCard)
-  cardElement.addEventListener('click', openImageModal)
+  
   return cardElement;
 }
 
@@ -23,16 +23,22 @@ const deleteCard = (evt) => {
 
 // Функция like карточки
 const likeCard = (evt) => {
-  evt.target.classList.toggle('card__like-button_is-active')
-}
-
-// Функция открытия картинки карточки
-const image = (evt) => {
-  const image = {
-    src: evt.src.value,
-    alt: evt.alt.value
+  if(evt.target.classList.contains('card__like-button')){
+    evt.target.classList.toggle('card__like-button_is-active')
   }
-  return image;
 }
 
-export {createCard, deleteCard, likeCard, openImageModal, image};
+const openImagePopup = (evt) => {
+  const card = evt.target;
+  if(card.classList.contains('card__image')) {
+    const imageSrc = card.getAttribute('src')
+    const imageAlt = card.getAttribute('alt')
+    const popupCaption = imagePopup.querySelector('.popup__caption')
+    imageImagePopup.setAttribute('src', imageSrc)
+    imageImagePopup.setAttribute('alt', imageAlt)
+    popupCaption.textContent = imageImagePopup.alt;
+    openModal(imagePopup)
+  }  
+}
+
+export {createCard, deleteCard, likeCard, openImagePopup};

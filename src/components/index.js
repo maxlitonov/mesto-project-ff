@@ -1,7 +1,7 @@
 import '../style/pages/index.css';
 import {initialCards} from './cards.js';
 import {popupEditForm, popupAddForm, popupImageForm, cardList, openModal, closeModal, handleEsc, handleEditProfileFormSubmit, handleAddProfileFormSubmit, modals, openEditModal, openAddModal} from './modal.js';
-import {createCard, deleteCard, likeCard, openImageModal} from './card.js';
+import {createCard, deleteCard, likeCard, openImagePopup} from './card.js';
 
 const placesList = document.querySelector('.places__list');
 const editButton = document.querySelector('.profile__edit-button');
@@ -11,7 +11,7 @@ const popup = document.querySelector('.popup');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (element) {
-  cardList.append(createCard(element, deleteCard, likeCard, openImageModal));
+  cardList.append(createCard(element, deleteCard, likeCard));
 });
 
 // Слушаутель закрытия на все модалки
@@ -40,4 +40,5 @@ popupEditForm.addEventListener('submit', handleEditProfileFormSubmit);
 // Слушатель сабмит add формы
 popupAddForm.addEventListener('submit', handleAddProfileFormSubmit);
 
-
+// Слушатель image формы
+cardList.addEventListener('click', openImagePopup)

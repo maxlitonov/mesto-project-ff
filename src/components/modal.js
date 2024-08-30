@@ -1,4 +1,4 @@
-import {createCard, deleteCard, likeCard, image} from './card.js'
+import {createCard, deleteCard, likeCard} from './card.js'
 
 const modals = document.querySelectorAll('.popup');
 const editPopup = document.querySelector('.popup_type_edit');
@@ -69,17 +69,11 @@ const handleAddProfileFormSubmit = (evt) => {
     link: cardLink.value,
     name: cardName.value
   }
-  cardList.prepend(createCard(newCard, deleteCard, likeCard, openImage));
+  cardList.prepend(createCard(newCard, deleteCard, likeCard));
   popupAddForm.reset();
   closeModal(addPopup);
 }
 
-const openImageModal = (evt) => {
-  image(evt.target)
-  openModal(imagePopup);
-}
-
-
 export {openModal, closeModal, handleEsc, handleEditProfileFormSubmit, handleAddProfileFormSubmit};
 export {openEditModal, openAddModal}
-export {modals, editPopup, addPopup, imagePopup, cardList, popupEditForm, popupAddForm, openImageModal};
+export {modals, editPopup, addPopup, imagePopup, cardList, popupEditForm, popupAddForm};
