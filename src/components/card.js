@@ -1,10 +1,8 @@
-import { openModal, imagePopup } from "./modal";
-
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
 
 // @todo: Функция создания карточки
-const createCard = (element, deleteCard, likeCard) => {
+const createCard = (element, deleteCard, likeCard, openImagePopup) => {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = cardElement.querySelector(".card__delete-button");
   cardElement.querySelector(".card__image").src = element.link;
@@ -12,7 +10,7 @@ const createCard = (element, deleteCard, likeCard) => {
   cardElement.querySelector(".card__title").textContent = element.name;
   deleteButton.addEventListener("click", deleteCard);
   cardElement.addEventListener("click", likeCard);
-
+  cardElement.addEventListener("click", openImagePopup);
   return cardElement;
 };
 

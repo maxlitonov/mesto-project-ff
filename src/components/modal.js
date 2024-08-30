@@ -1,21 +1,4 @@
-import { createCard, deleteCard, likeCard } from "./card.js";
-
-const modals = document.querySelectorAll(".popup");
-const editPopup = document.querySelector(".popup_type_edit");
-const addPopup = document.querySelector(".popup_type_new-card");
-const imagePopup = document.querySelector(".popup_type_image");
-
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-
-const cardList = document.querySelector(".places__list");
-const cardName = document.querySelector(".popup__input_type_card-name");
-const cardLink = document.querySelector(".popup__input_type_url");
-
-const popupEditForm = document.querySelector(".popup_type_edit .popup__form");
-const popupAddForm = document.querySelector(".popup_type_new-card .popup__form");
+import { modals } from './index.js'
 
 // Открытие формы
 const openModal = (modal) => {
@@ -40,50 +23,16 @@ const handleEsc = (evt) => {
   }
 };
 
-// Функция открытия edit модалки
-const openEditModal = (evt) => {
-  nameInput.value = profileTitle.textContent;
-  jobInput.value = profileDescription.textContent;
-  openModal(editPopup);
-};
-
-// Функция сабмит edit формы
-const handleEditProfileFormSubmit = (evt) => {
-  evt.preventDefault();
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
-  closeModal(editPopup);
-};
-
-// Функция открытия add модалки
-const openAddModal = (evt) => {
-  openModal(addPopup);
-};
-
-// Функция сабмит add формы
-const handleAddProfileFormSubmit = (evt) => {
-  evt.preventDefault();
-  const newCard = {
-    link: cardLink.value,
-    name: cardName.value,
-  };
-  cardList.prepend(createCard(newCard, deleteCard, likeCard));
-  popupAddForm.reset();
-  closeModal(addPopup);
-};
+// Функция закрытия click по overlay
+const closePopupByOverlay = evt => {
+  if(evt.target.classList.contains('popup__close')|| evt.target.classList.contains('popup')) { 
+     closeModal(evt.currentTarget); 
+   }
+}
 
 export {
   openModal,
   closeModal,
-  handleEsc,
-  handleEditProfileFormSubmit,
-  handleAddProfileFormSubmit,
-  modals,
-  editPopup,
-  addPopup,
-  imagePopup,
-  cardList,
-  popupEditForm,
-  popupAddForm,
+  closePopupByOverlay
 };
-export { openEditModal, openAddModal };
+
