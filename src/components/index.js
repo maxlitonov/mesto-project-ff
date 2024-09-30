@@ -92,5 +92,3 @@ popupEditForm.addEventListener("submit", handleEditProfileFormSubmit);
 
 // Слушатель сабмит add формы
 popupAddForm.addEventListener("submit", handleAddProfileFormSubmit);
-
-export { modals };

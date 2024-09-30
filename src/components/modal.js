@@ -1,5 +1,3 @@
-import { modals } from './index.js'
-
 // Открытие формы
 const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
@@ -14,6 +12,7 @@ const closeModal = (modal) => {
 
 // Закрытие по ESC
 const handleEsc = (evt) => {
+  const modals = document.querySelectorAll(".popup");
   if (evt.key === "Escape") {
     modals.forEach((modal) => {
       if (modal.classList.contains("popup_is-opened")) {
