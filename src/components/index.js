@@ -2,6 +2,7 @@ import "../style/pages/index.css";
 import { initialCards } from "./cards.js";
 import { openModal, closeModal, closePopupByOverlay } from "./modal.js";
 import { createCard, deleteCard, likeCard } from "./card.js";
+// import {showInputError, hideInputError} from "./validation.js"
 
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
@@ -34,7 +35,7 @@ const openImagePopup = (evt) => {
   }
 };
 
-// @todo: Вывести карточки на страницу
+// Вывести карточки на страницу
 initialCards.forEach(function (element) {
   cardList.append(createCard(element, deleteCard, likeCard, openImagePopup));
 });
@@ -92,3 +93,33 @@ popupEditForm.addEventListener("submit", handleEditProfileFormSubmit);
 
 // Слушатель сабмит add формы
 popupAddForm.addEventListener("submit", handleAddProfileFormSubmit);
+
+/////////////////////////////// 7 Sprint /////////////////////////////////////////
+const popupElement = document.querySelector('.popup__form')
+const popupInput = popupElement.querySelector('.popup__input')
+
+
+const showError = (popupElement, popupInput, errorMessage) => {
+  const errorElement = popupElement.querySelector(`.${popupInput.id}-error`);
+  popupInput.classList.add('popup__input_type_error');
+  errorElement.classList.add('popup__input-error_active')
+  errorElement.textContent = errorMessage;
+}
+
+const hideError = (popupElement, popupInput) => {
+  const errorElement = popupElement.querySelector(`.${popupInput.id}-error`);
+  popupInput.classList.remove('popup__input_type_error');
+  errorElement.classList.remove('popup__input-error_active')
+  errorElement.textContent = '';
+}
+
+const checkInputValidity = (popupElement, popupInput) => {
+  if(!popupInput.validity.valid) {
+    showError(popupElement, popupInput, popupInput.validationMessage)
+  } else {
+    hideError(popupElement, popupInput)
+  }
+}
+
+
+popupInput.addEventListener('input', checkInputValidity); 
