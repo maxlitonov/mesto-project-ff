@@ -95,31 +95,79 @@ popupEditForm.addEventListener("submit", handleEditProfileFormSubmit);
 popupAddForm.addEventListener("submit", handleAddProfileFormSubmit);
 
 /////////////////////////////// 7 Sprint /////////////////////////////////////////
-const popupElement = document.querySelector('.popup__form')
-const popupInput = popupElement.querySelector('.popup__input')
 
 
-const showError = (popupElement, popupInput, errorMessage) => {
-  const errorElement = popupElement.querySelector(`.${popupInput.id}-error`);
+// Функция, которая добавляет класс с ошибкой
+const showInputError = (popupForm, popupInput, errorMessage) => {
+  const popupError = popupForm.querySelector(`.${popupInput.id}-error`);
   popupInput.classList.add('popup__input_type_error');
-  errorElement.classList.add('popup__input-error_active')
-  errorElement.textContent = errorMessage;
-}
+  popupError.textContent = errorMessage;
+  popupError.classList.add('popup__input-error_active')
+};
 
-const hideError = (popupElement, popupInput) => {
-  const errorElement = popupElement.querySelector(`.${popupInput.id}-error`);
+// Функция, которая удаляет класс с ошибкой
+const hideInputError = (popupForm, popupInput) => {
+  const popupError = popupForm.querySelector(`.${popupInput.id}-error`);
   popupInput.classList.remove('popup__input_type_error');
-  errorElement.classList.remove('popup__input-error_active')
-  errorElement.textContent = '';
+  popupError.classList.remove('popup__input-error_active')
+  popupError.textContent = '';
+};
+
+// Функция, которая проверяет valid Для button
+const hasInvalidInput = (inputList) => {
+  return inputList.some((popupInput) => {
+    return !popupInput.validity.valid;
+  })
 }
 
-const checkInputValidity = (popupElement, popupInput) => {
-  if(!popupInput.validity.valid) {
-    showError(popupElement, popupInput, popupInput.validationMessage)
+const toggleButtonState = (inputList, buttonElement) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.disabled = true;
+    buttonElement.classList.add('popup__button_inactive');
   } else {
-    hideError(popupElement, popupInput)
+    buttonElement.disabled = false;
+    buttonElement.classList.remove('popup__button_inactive');
   }
+}; 
+
+// Функция, которая проверяет валидность поля
+const checkInputValidity = (popupForm, popupInput) => {
+  if (popupInput.validity.patternMismatch) {
+    popupInput.setCustomValidity(popupInput.dataset.errorMessage);
+  } else {
+    popupInput.setCustomValidity("");
+  }
+
+  if (!popupInput.validity.valid) {
+    // Если поле не проходит валидацию, покажем ошибку
+    showInputError(popupForm, popupInput, popupInput.validationMessage);
+  } else {
+    // Если проходит, скроем
+    hideInputError(popupForm, popupInput);
+  }
+};
+
+// Функция, которая вешает слушатель validation на все input в форме
+const setEventListeners = (popupForm) => {
+  const buttonElement = popupForm.querySelector('.popup__button');
+  const inputList = Array.from(popupForm.querySelectorAll('.popup__input'))
+  inputList.forEach((popupInput) => {
+    popupInput.addEventListener('click', () => {
+      checkInputValidity(popupForm, popupInput)
+      toggleButtonState(inputList, buttonElement)
+    })
+  })
 }
 
+// Функция, которая проходит по формам и юзает setEventListeners на них
+const enableValidation = () => {
+  const formList = Array.from(document.querySelectorAll('.popup__form'))
+  formList.forEach((popupForm) => {
+    setEventListeners(popupForm)
+  })
+}
 
-popupInput.addEventListener('input', checkInputValidity); 
+enableValidation();
+
+
+
