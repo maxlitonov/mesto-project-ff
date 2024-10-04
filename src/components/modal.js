@@ -8,6 +8,7 @@ const openModal = (modal) => {
 const closeModal = (modal) => {
   modal.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", handleEsc);
+  // modal.querySelector('.popup__form').reset(); /// reset form
 };
 
 // Закрытие по ESC
@@ -23,7 +24,7 @@ const handleEsc = (evt) => {
 };
 
 // Функция закрытия click по overlay
-const closePopupByOverlay = evt => {
+const closePopupByOverlay = (evt) => {
   if(evt.target.classList.contains('popup__close')|| evt.target.classList.contains('popup')) { 
      closeModal(evt.currentTarget); 
    }
