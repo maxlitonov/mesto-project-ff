@@ -1,11 +1,11 @@
 import "./style/pages/index.css";
-import { openModal, closeModal, closePopupByOverlay } from "./components/modal.js";
-import { createCard, deleteCard, likeCard } from "./components/card.js";
 import {
-  validationConfig,
-  enableValidation,
-  clearValidation,
-} from "./components/validation.js";
+  openModal,
+  closeModal,
+  closePopupByOverlay,
+} from "./components/modal.js";
+import { createCard, deleteCard, likeCard } from "./components/card.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 import {
   editButton,
   addButton,
@@ -35,6 +35,7 @@ import {
   setUserAvatar,
   setUserinfo,
 } from "./components/api.js";
+import { validationConfig } from "./components/validation.js";
 
 let userId = null;
 
