@@ -15,9 +15,10 @@ const cardList = document.querySelector(".places__list");
 const popupEditForm = document.querySelector(".popup_type_edit .popup__form");
 const popupAddForm = document.querySelector(".popup_type_new-card .popup__form");
 
-const popupAvatar = document.querySelector('.popup_type_avatar');
+const avatarPopup = document.querySelector('.popup_type_avatar');
 const popupAvatarForm = document.querySelector(".popup_type_avatar .popup__form");
-const avatar = document.querySelector('.profile__image');
+const profileAvatar = document.querySelector('.profile__image');
+const inputAvatar = avatarPopup.querySelector('.popup__input_type_url-avatar')
 
 export{
   editButton,
@@ -36,7 +37,8 @@ export{
   cardList,
   popupEditForm,
   popupAddForm,
-  popupAvatar,
+  avatarPopup,
   popupAvatarForm,
-  avatar
+  profileAvatar,
+  inputAvatar
 }
