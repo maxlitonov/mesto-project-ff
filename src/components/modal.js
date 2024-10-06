@@ -1,5 +1,3 @@
-import { modals } from './index.js'
-
 // Открытие формы
 const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
@@ -14,6 +12,7 @@ const closeModal = (modal) => {
 
 // Закрытие по ESC
 const handleEsc = (evt) => {
+  const modals = document.querySelectorAll(".popup");
   if (evt.key === "Escape") {
     modals.forEach((modal) => {
       if (modal.classList.contains("popup_is-opened")) {
@@ -24,7 +23,7 @@ const handleEsc = (evt) => {
 };
 
 // Функция закрытия click по overlay
-const closePopupByOverlay = evt => {
+const closePopupByOverlay = (evt) => {
   if(evt.target.classList.contains('popup__close')|| evt.target.classList.contains('popup')) { 
      closeModal(evt.currentTarget); 
    }

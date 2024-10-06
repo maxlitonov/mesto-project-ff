@@ -1,26 +1,64 @@
 import "../style/pages/index.css";
-import { initialCards } from "./cards.js";
 import { openModal, closeModal, closePopupByOverlay } from "./modal.js";
 import { createCard, deleteCard, likeCard } from "./card.js";
+import {validationConfig, enableValidation, clearValidation} from "./validation.js";
+import{
+  editButton,
+  addButton,
+  imageImagePopup,
+  cardName,
+  cardLink,
+  nameInput,
+  jobInput,
+  profileTitle,
+  profileDescription,
+  modals,
+  editPopup,
+  addPopup,
+  imagePopup,
+  cardList,
+  popupEditForm,
+  popupAddForm,
+  avatarPopup,
+  popupAvatarForm,
+  profileAvatar,
+  inputAvatar
+} from "./variables.js";
+import { addCard, getCardList, getUserInfo, setUserAvatar, setUserinfo, changeLikeCardStatus} from "./api.js";
 
-const editButton = document.querySelector(".profile__edit-button");
-const addButton = document.querySelector(".profile__add-button");
-const imageImagePopup = document.querySelector(".popup__image");
-const cardName = document.querySelector(".popup__input_type_card-name");
-const cardLink = document.querySelector(".popup__input_type_url");
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-const modals = document.querySelectorAll(".popup");
-const editPopup = document.querySelector(".popup_type_edit");
-const addPopup = document.querySelector(".popup_type_new-card");
-const imagePopup = document.querySelector(".popup_type_image");
-const cardList = document.querySelector(".places__list");
-const popupEditForm = document.querySelector(".popup_type_edit .popup__form");
-const popupAddForm = document.querySelector(".popup_type_new-card .popup__form");
+let userId = null;
 
-// Функция открытия image модалки
+Promise.all([getCardList(), getUserInfo()])
+.then(([cards, userInfo]) => {
+  userId = userInfo._id;
+  profileTitle.textContent = userInfo.name;
+  profileDescription.textContent = userInfo.about;
+  profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
+
+  // Вывести карточки на страницу
+  cards.forEach((element) => {
+    cardList.append(createCard(element, {deleteCard, likeCard, openImagePopup}, userId));
+  });
+})
+.catch((err) => console.log(`Ошибка: ${err}`));
+
+// Слушаутель закрытия на все модалки
+modals.forEach((modal) => {
+  modal.addEventListener("click", closePopupByOverlay);
+});
+
+// Добавление анимации
+modals.forEach((modal) => {
+  modal.classList.add("popup_is-animated");
+});
+
+// Render
+const renderLoading = (saveButton, status) => {
+  saveButton.textContent = status;
+}
+
+/////////////////////////////////image modal//////////////////////////////////
+// @todo Open image popup
 const openImagePopup = (evt) => {
   const card = evt.target;
   if (card.classList.contains("card__image")) {
@@ -34,58 +72,93 @@ const openImagePopup = (evt) => {
   }
 };
 
-// @todo: Вывести карточки на страницу
-initialCards.forEach(function (element) {
-  cardList.append(createCard(element, deleteCard, likeCard, openImagePopup));
-});
-
-// Слушаутель закрытия на все модалки
-modals.forEach((modal) => {
-  modal.addEventListener("click", closePopupByOverlay);
-});
-
-// Добавление анимации
-modals.forEach((modal) => {
-  modal.classList.add("popup_is-animated");
-});
-
-// Функция открытия edit модалки
-const openEditModal = (evt) => {
+/////////////////////////////////edit modal//////////////////////////////////
+// @todo Open edit popup
+const openEditModal = () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
   openModal(editPopup);
 };
 
-// Функция сабмит edit формы
+// @todo Submit edit form
 const handleEditProfileFormSubmit = (evt) => {
   evt.preventDefault();
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
+  renderLoading(evt.submitter, "Сохранение...");
+  setUserinfo({name: nameInput.value, about: jobInput.value})
+  .then((data) => {
+    profileTitle.textContent = data.name;
+    profileDescription.textContent = data.about;
+  })
+  .catch((err) => console.log(`Ошибка: ${err}`))
+  .finally(() => renderLoading(evt.submitter, "Сохранить"));
   closeModal(editPopup);
 };
 
-// Функция открытия add модалки
-const openAddModal = (evt) => {
+/////////////////////////////////add modal//////////////////////////////////
+// @todo Open add popup
+const openAddModal = () => {
+  popupAddForm.reset()
   openModal(addPopup);
 };
 
-// Функция сабмит add формы
+// @todo Submit add form
 const handleAddProfileFormSubmit = (evt) => {
   evt.preventDefault();
-  const newCard = {
-    link: cardLink.value,
+  renderLoading(evt.submitter, "Сохранение...");
+
+  const card = {
     name: cardName.value,
+    link: cardLink.value,
   };
-  cardList.prepend(createCard(newCard, deleteCard, likeCard, openImagePopup));
+  addCard(card)
+  .then((card) => {
+    cardList.prepend(createCard(card, {deleteCard, likeCard, openImagePopup}, userId));
+  })
+  .catch((err) => console.log(`Ошибка: ${err}`))
+  .finally(() => renderLoading(evt.submitter, "Сохранить"));
   popupAddForm.reset();
   closeModal(addPopup);
 };
 
+/////////////////////////////////avatar modal//////////////////////////////////
+// Функция открытия avatar модалки
+const openAvatarModal = () => {
+  clearValidation(popupAvatarForm, validationConfig)
+  openModal(avatarPopup);
+};
+
+// @todo Submit avatar form
+const handleEditAvatarFormSubmit = (evt) => {
+  evt.preventDefault();
+  renderLoading(evt.submitter, "Сохранение...");
+  setUserAvatar({avatar: inputAvatar.value})
+  .then((data) => {
+    profileAvatar.style = `background-image: url(${data.avatar})`;
+  })
+  .catch((err) => console.log(`Ошибка: ${err}`))
+  .finally(() => renderLoading(evt.submitter, "Сохранить"));
+  closeModal(avatarPopup);
+};
+
 // Слушатель открытия модалки редактирования
-editButton.addEventListener("click", openEditModal);
+editButton.addEventListener("click", () => {
+  clearValidation(popupEditForm, validationConfig);
+  openEditModal();
+});
 
 // Слушатель открытия модалки добавления карточки
-addButton.addEventListener("click", openAddModal);
+addButton.addEventListener("click", () => {
+  clearValidation(popupAddForm, validationConfig);
+  openAddModal();
+});
+
+profileAvatar.addEventListener('click', () => {
+  clearValidation(popupAvatarForm, validationConfig)
+  openAvatarModal();
+})
+
+// Слушатель сабмит avatar формы
+popupAvatarForm.addEventListener("submit", handleEditAvatarFormSubmit);
 
 // Слушатель сабмит edit формы
 popupEditForm.addEventListener("submit", handleEditProfileFormSubmit);
@@ -93,4 +166,8 @@ popupEditForm.addEventListener("submit", handleEditProfileFormSubmit);
 // Слушатель сабмит add формы
 popupAddForm.addEventListener("submit", handleAddProfileFormSubmit);
 
-export { modals };
+// Включение validation
+enableValidation(validationConfig);
+
+
+
