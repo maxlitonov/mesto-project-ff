@@ -1,8 +1,12 @@
-import "../style/pages/index.css";
-import { openModal, closeModal, closePopupByOverlay } from "./modal.js";
-import { createCard, deleteCard, likeCard } from "./card.js";
-import {validationConfig, enableValidation, clearValidation} from "./validation.js";
-import{
+import "./style/pages/index.css";
+import { openModal, closeModal, closePopupByOverlay } from "./components/modal.js";
+import { createCard, deleteCard, likeCard } from "./components/card.js";
+import {
+  validationConfig,
+  enableValidation,
+  clearValidation,
+} from "./components/validation.js";
+import {
   editButton,
   addButton,
   imageImagePopup,
@@ -22,25 +26,32 @@ import{
   avatarPopup,
   popupAvatarForm,
   profileAvatar,
-  inputAvatar
-} from "./variables.js";
-import { addCard, getCardList, getUserInfo, setUserAvatar, setUserinfo, changeLikeCardStatus} from "./api.js";
+  inputAvatar,
+} from "./components/variables.js";
+import {
+  addCard,
+  getCardList,
+  getUserInfo,
+  setUserAvatar,
+  setUserinfo,
+} from "./components/api.js";
 
 let userId = null;
 
 Promise.all([getCardList(), getUserInfo()])
-.then(([cards, userInfo]) => {
-  userId = userInfo._id;
-  profileTitle.textContent = userInfo.name;
-  profileDescription.textContent = userInfo.about;
-  profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
-
-  // Вывести карточки на страницу
-  cards.forEach((element) => {
-    cardList.append(createCard(element, {deleteCard, likeCard, openImagePopup}, userId));
-  });
-})
-.catch((err) => console.log(`Ошибка: ${err}`));
+  .then(([cards, userInfo]) => {
+    userId = userInfo._id;
+    profileTitle.textContent = userInfo.name;
+    profileDescription.textContent = userInfo.about;
+    profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
+    // Вывести карточки на страницу
+    cards.forEach((element) => {
+      cardList.append(
+        createCard(element, { deleteCard, likeCard, openImagePopup }, userId)
+      );
+    });
+  })
+  .catch((err) => console.log(`Ошибка: ${err}`));
 
 // Слушаутель закрытия на все модалки
 modals.forEach((modal) => {
@@ -55,9 +66,8 @@ modals.forEach((modal) => {
 // Render
 const renderLoading = (saveButton, status) => {
   saveButton.textContent = status;
-}
+};
 
-/////////////////////////////////image modal//////////////////////////////////
 // @todo Open image popup
 const openImagePopup = (evt) => {
   const card = evt.target;
@@ -72,7 +82,6 @@ const openImagePopup = (evt) => {
   }
 };
 
-/////////////////////////////////edit modal//////////////////////////////////
 // @todo Open edit popup
 const openEditModal = () => {
   nameInput.value = profileTitle.textContent;
@@ -84,20 +93,19 @@ const openEditModal = () => {
 const handleEditProfileFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(evt.submitter, "Сохранение...");
-  setUserinfo({name: nameInput.value, about: jobInput.value})
-  .then((data) => {
-    profileTitle.textContent = data.name;
-    profileDescription.textContent = data.about;
-  })
-  .catch((err) => console.log(`Ошибка: ${err}`))
-  .finally(() => renderLoading(evt.submitter, "Сохранить"));
+  setUserinfo({ name: nameInput.value, about: jobInput.value })
+    .then((data) => {
+      profileTitle.textContent = data.name;
+      profileDescription.textContent = data.about;
+    })
+    .catch((err) => console.log(`Ошибка: ${err}`))
+    .finally(() => renderLoading(evt.submitter, "Сохранить"));
   closeModal(editPopup);
 };
 
-/////////////////////////////////add modal//////////////////////////////////
 // @todo Open add popup
 const openAddModal = () => {
-  popupAddForm.reset()
+  popupAddForm.reset();
   openModal(addPopup);
 };
 
@@ -105,25 +113,25 @@ const openAddModal = () => {
 const handleAddProfileFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(evt.submitter, "Сохранение...");
-
   const card = {
     name: cardName.value,
     link: cardLink.value,
   };
   addCard(card)
-  .then((card) => {
-    cardList.prepend(createCard(card, {deleteCard, likeCard, openImagePopup}, userId));
-  })
-  .catch((err) => console.log(`Ошибка: ${err}`))
-  .finally(() => renderLoading(evt.submitter, "Сохранить"));
+    .then((card) => {
+      cardList.prepend(
+        createCard(card, { deleteCard, likeCard, openImagePopup }, userId)
+      );
+    })
+    .catch((err) => console.log(`Ошибка: ${err}`))
+    .finally(() => renderLoading(evt.submitter, "Сохранить"));
   popupAddForm.reset();
   closeModal(addPopup);
 };
 
-/////////////////////////////////avatar modal//////////////////////////////////
 // Функция открытия avatar модалки
 const openAvatarModal = () => {
-  clearValidation(popupAvatarForm, validationConfig)
+  clearValidation(popupAvatarForm, validationConfig);
   openModal(avatarPopup);
 };
 
@@ -131,12 +139,12 @@ const openAvatarModal = () => {
 const handleEditAvatarFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(evt.submitter, "Сохранение...");
-  setUserAvatar({avatar: inputAvatar.value})
-  .then((data) => {
-    profileAvatar.style = `background-image: url(${data.avatar})`;
-  })
-  .catch((err) => console.log(`Ошибка: ${err}`))
-  .finally(() => renderLoading(evt.submitter, "Сохранить"));
+  setUserAvatar({ avatar: inputAvatar.value })
+    .then((data) => {
+      profileAvatar.style = `background-image: url(${data.avatar})`;
+    })
+    .catch((err) => console.log(`Ошибка: ${err}`))
+    .finally(() => renderLoading(evt.submitter, "Сохранить"));
   closeModal(avatarPopup);
 };
 
@@ -152,10 +160,11 @@ addButton.addEventListener("click", () => {
   openAddModal();
 });
 
-profileAvatar.addEventListener('click', () => {
-  clearValidation(popupAvatarForm, validationConfig)
+// Слушатель открытия модалки avatar
+profileAvatar.addEventListener("click", () => {
+  clearValidation(popupAvatarForm, validationConfig);
   openAvatarModal();
-})
+});
 
 // Слушатель сабмит avatar формы
 popupAvatarForm.addEventListener("submit", handleEditAvatarFormSubmit);
@@ -168,6 +177,3 @@ popupAddForm.addEventListener("submit", handleAddProfileFormSubmit);
 
 // Включение validation
 enableValidation(validationConfig);
-
-
-

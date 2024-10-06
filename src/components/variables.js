@@ -13,14 +13,17 @@ const addPopup = document.querySelector(".popup_type_new-card");
 const imagePopup = document.querySelector(".popup_type_image");
 const cardList = document.querySelector(".places__list");
 const popupEditForm = document.querySelector(".popup_type_edit .popup__form");
-const popupAddForm = document.querySelector(".popup_type_new-card .popup__form");
+const popupAddForm = document.querySelector(
+  ".popup_type_new-card .popup__form"
+);
+const avatarPopup = document.querySelector(".popup_type_avatar");
+const popupAvatarForm = document.querySelector(
+  ".popup_type_avatar .popup__form"
+);
+const profileAvatar = document.querySelector(".profile__image");
+const inputAvatar = avatarPopup.querySelector(".popup__input_type_url-avatar");
 
-const avatarPopup = document.querySelector('.popup_type_avatar');
-const popupAvatarForm = document.querySelector(".popup_type_avatar .popup__form");
-const profileAvatar = document.querySelector('.profile__image');
-const inputAvatar = avatarPopup.querySelector('.popup__input_type_url-avatar')
-
-export{
+export {
   editButton,
   addButton,
   imageImagePopup,
@@ -40,5 +43,5 @@ export{
   avatarPopup,
   popupAvatarForm,
   profileAvatar,
-  inputAvatar
-}
+  inputAvatar,
+};

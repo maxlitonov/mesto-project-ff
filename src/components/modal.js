@@ -24,14 +24,12 @@ const handleEsc = (evt) => {
 
 // Функция закрытия click по overlay
 const closePopupByOverlay = (evt) => {
-  if(evt.target.classList.contains('popup__close')|| evt.target.classList.contains('popup')) { 
-     closeModal(evt.currentTarget); 
-   }
-}
-
-export {
-  openModal,
-  closeModal,
-  closePopupByOverlay
+  if (
+    evt.target.classList.contains("popup__close") ||
+    evt.target.classList.contains("popup")
+  ) {
+    closeModal(evt.currentTarget);
+  }
 };
 
+export { openModal, closeModal, closePopupByOverlay };
