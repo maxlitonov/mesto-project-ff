@@ -8,7 +8,6 @@ const openModal = (modal) => {
 const closeModal = (modal) => {
   modal.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", handleEsc);
-  // modal.querySelector('.popup__form').reset(); /// reset form
 };
 
 // Закрытие по ESC
