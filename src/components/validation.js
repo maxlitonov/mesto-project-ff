@@ -1,5 +1,3 @@
-import { validationConfig } from "./validation-config";
-
 // Функция, которая добавляет класс с ошибкой
 const showInputError = (
   formElement,
@@ -40,7 +38,7 @@ const toggleButtonState = (inputList, buttonElement, validationConfig) => {
 };
 
 // Функция, которая проверяет валидность поля
-const checkInputValidity = (formElement, inputElement) => {
+const checkInputValidity = (formElement, inputElement, validationConfig) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
@@ -72,7 +70,7 @@ const setEventListeners = (formElement, validationConfig) => {
   toggleButtonState(inputList, buttonElement, validationConfig);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
-      checkInputValidity(formElement, inputElement);
+      checkInputValidity(formElement, inputElement, validationConfig);
       toggleButtonState(inputList, buttonElement, validationConfig);
     });
   });
@@ -103,4 +101,4 @@ const clearValidation = (formElement, validationConfig) => {
   toggleButtonState(inputList, buttonElement, validationConfig);
 };
 
-export { validationConfig, enableValidation, clearValidation };
+export { enableValidation, clearValidation };

@@ -56,21 +56,12 @@ const likeCard = (likeButton, card) => {
   const cardId = card.id;
   const likeCounter = card.querySelector(".card__like-counter");
 
-  if (!isMyLikeOnCard) {
-    changeLikeCardStatus(cardId, isMyLikeOnCard) 
-        .then((res) => {
-           likeButton.classList.add("card__like-button_is-active");
-           likeCounter.textContent = res.likes.length;
-        })
-        .catch(err => console.log(err));
-  } else if (isMyLikeOnCard) {
-    changeLikeCardStatus(cardId, isMyLikeOnCard)
-      .then((res) => {
-        likeButton.classList.remove("card__like-button_is-active");
-        likeCounter.textContent = res.likes.length;
-      })
-      .catch((err) => console.log(`Ошибка: ${err}`));
-  }
+  changeLikeCardStatus(cardId, isMyLikeOnCard)
+    .then((res) => {
+      likeButton.classList.toggle("card__like-button_is-active");
+      likeCounter.textContent = res.likes.length;
+    })
+    .catch((err) => console.log(`Ошибка: ${err}`));
 };
 
 export { createCard, deleteCard, likeCard };
